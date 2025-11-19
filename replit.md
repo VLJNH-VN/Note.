@@ -43,3 +43,5 @@ Chuẩn bị cho Railway:
   - UI với syntax highlighting
   - Railway deployment config
   - Documentation cho bot integration
+  - Fixed Railway deployment: Downgrade nanoid v3 (CommonJS compatible)
+  - Security fixes: XSS protection, input validation, security headers
