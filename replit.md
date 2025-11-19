@@ -7,6 +7,7 @@ Website API chia sẻ code giống dpaste, cho phép:
 - API endpoints đầy đủ cho bot Messenger, Discord, Telegram
 - Paste có thể có thời gian hết hạn
 - Theo dõi lượt xem
+- **Private Paste**: Paste riêng tư không hiển thị ở trang chủ, chỉ người có link mới xem được (ID dài 21 ký tự cho bảo mật cao)
 
 ## Tech Stack
 - Node.js + Express (server)
@@ -45,3 +46,9 @@ Chuẩn bị cho Railway:
   - Documentation cho bot integration
   - Fixed Railway deployment: Downgrade nanoid v3 (CommonJS compatible)
   - Security fixes: XSS protection, input validation, security headers
+  - **Added Private Paste feature**: 
+    - Checkbox để tạo paste riêng tư
+    - Private pastes không hiển thị ở trang chủ
+    - Sử dụng ID dài 21 ký tự (vs 10 ký tự cho public) để tăng bảo mật
+    - Database schema updated với cột is_private
+    - API endpoint hỗ trợ isPrivate parameter
