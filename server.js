@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 
 app.post('/api/paste', (req, res) => {
   try {
-    const { title, content, language, expiresIn } = req.body;
+    const { title, content, language, expiresIn, isPrivate } = req.body;
 
     if (!content || content.trim().length === 0) {
       return res.status(400).json({ 
@@ -69,7 +69,8 @@ app.post('/api/paste', (req, res) => {
       title || 'Untitled',
       content,
       validatedLanguage,
-      expirationMs
+      expirationMs,
+      isPrivate
     );
 
     const baseUrl = req.get('host');
@@ -80,7 +81,8 @@ app.post('/api/paste', (req, res) => {
       id: paste.id,
       url: `${protocol}://${baseUrl}/bachhoang/${paste.id}`,
       raw_url: `${protocol}://${baseUrl}/api/paste/${paste.id}/raw`,
-      api_url: `${protocol}://${baseUrl}/api/paste/${paste.id}`
+      api_url: `${protocol}://${baseUrl}/api/paste/${paste.id}`,
+      is_private: !!isPrivate
     });
   } catch (error) {
     console.error('Error creating paste:', error);

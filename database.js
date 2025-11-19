@@ -12,22 +12,39 @@ db.exec(`
     language TEXT DEFAULT 'plaintext',
     created_at INTEGER NOT NULL,
     expires_at INTEGER,
-    views INTEGER DEFAULT 0
+    views INTEGER DEFAULT 0,
+    is_private INTEGER DEFAULT 0
   )
 `);
 
-const createPaste = (title, content, language, expiresIn) => {
-  const id = nanoid(10);
+const addColumnIfNotExists = (tableName, columnName, columnDef) => {
+  try {
+    const columns = db.prepare(`PRAGMA table_info(${tableName})`).all();
+    const columnExists = columns.some(col => col.name === columnName);
+    
+    if (!columnExists) {
+      db.exec(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnDef}`);
+      console.log(`✅ Added column ${columnName} to ${tableName}`);
+    }
+  } catch (error) {
+    console.error(`Error adding column ${columnName}:`, error);
+  }
+};
+
+addColumnIfNotExists('pastes', 'is_private', 'INTEGER DEFAULT 0');
+
+const createPaste = (title, content, language, expiresIn, isPrivate = false) => {
+  const id = isPrivate ? nanoid(21) : nanoid(10);
   const createdAt = Date.now();
   const expiresAt = expiresIn ? createdAt + expiresIn : null;
 
   const stmt = db.prepare(`
-    INSERT INTO pastes (id, title, content, language, created_at, expires_at)
-    VALUES (?, ?, ?, ?, ?, ?)
+    INSERT INTO pastes (id, title, content, language, created_at, expires_at, is_private)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
   `);
 
-  stmt.run(id, title, content, language, createdAt, expiresAt);
-  return { id, title, content, language, createdAt, expiresAt };
+  stmt.run(id, title, content, language, createdAt, expiresAt, isPrivate ? 1 : 0);
+  return { id, title, content, language, createdAt, expiresAt, isPrivate };
 };
 
 const getPaste = (id) => {
@@ -56,7 +73,7 @@ const getRecentPastes = (limit = 10) => {
   const stmt = db.prepare(`
     SELECT id, title, language, created_at, views
     FROM pastes
-    WHERE expires_at IS NULL OR expires_at > ?
+    WHERE (expires_at IS NULL OR expires_at > ?) AND is_private = 0
     ORDER BY created_at DESC
     LIMIT ?
   `);

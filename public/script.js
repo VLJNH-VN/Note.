@@ -3,6 +3,7 @@ async function createPaste() {
     const content = document.getElementById('content').value;
     const language = document.getElementById('language').value;
     const expiresIn = document.getElementById('expires').value;
+    const isPrivate = document.getElementById('isPrivate').checked;
 
     if (!content.trim()) {
         alert('⚠️ Vui lòng nhập nội dung!');
@@ -23,15 +24,20 @@ async function createPaste() {
                 title: title || 'Untitled',
                 content,
                 language,
-                expiresIn: expiresIn || null
+                expiresIn: expiresIn || null,
+                isPrivate
             })
         });
 
         const data = await response.json();
 
         if (data.success) {
+            const privateNote = data.is_private 
+                ? '<p style="color: #ff9800; font-weight: bold;">🔒 Paste này là riêng tư - chỉ người có link mới xem được</p>' 
+                : '';
             resultBox.innerHTML = `
                 <h3>✅ Paste đã được tạo thành công!</h3>
+                ${privateNote}
                 <p><strong>Link:</strong> <a href="${data.url}" target="_blank">${data.url}</a></p>
                 <p><strong>Raw:</strong> <a href="${data.raw_url}" target="_blank">${data.raw_url}</a></p>
                 <p><strong>API:</strong> <a href="${data.api_url}" target="_blank">${data.api_url}</a></p>
