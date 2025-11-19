@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note Paste Bạch Hoàng - Chia sẻ code dễ dàng</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📝 Note Paste Bạch Hoàng</h1>
+            <p class="subtitle">Chia sẻ code nhanh chóng & dễ dàng với API hỗ trợ bot</p>
+        </header>
+
+        <div class="main-content">
+            <div class="paste-form">
+                <div class="form-group">
+                    <input type="text" id="title" placeholder="Tiêu đề (tùy chọn)" class="input-field">
+                </div>
+
+                <div class="form-group">
+                    <select id="language" class="select-field">
+                        <option value="plaintext">Văn bản thường</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="python">Python</option>
+                        <option value="java">Java</option>
+                        <option value="cpp">C++</option>
+                        <option value="csharp">C#</option>
+                        <option value="php">PHP</option>
+                        <option value="ruby">Ruby</option>
+                        <option value="go">Go</option>
+                        <option value="rust">Rust</option>
+                        <option value="html">HTML</option>
+                        <option value="css">CSS</option>
+                        <option value="sql">SQL</option>
+                        <option value="json">JSON</option>
+                        <option value="xml">XML</option>
+                        <option value="markdown">Markdown</option>
+                        <option value="bash">Bash</option>
+                        <option value="typescript">TypeScript</option>
+                    </select>
+
+                    <select id="expires" class="select-field">
+                        <option value="">Không giới hạn</option>
+                        <option value="3600">1 giờ</option>
+                        <option value="86400">1 ngày</option>
+                        <option value="604800">1 tuần</option>
+                        <option value="2592000">1 tháng</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <textarea id="content" placeholder="Paste code của bạn vào đây..." class="textarea-field"></textarea>
+                </div>
+
+                <button onclick="createPaste()" class="btn-primary">
+                    <span class="btn-icon">🚀</span>
+                    Tạo Paste
+                </button>
+
+                <div id="result" class="result-box hidden"></div>
+            </div>
+
+            <% if (recentPastes && recentPastes.length > 0) { %>
+            <div class="recent-pastes">
+                <h2>📋 Pastes gần đây</h2>
+                <div class="paste-list">
+                    <% recentPastes.forEach(paste => { %>
+                    <a href="/bachhoang/<%= paste.id %>" class="paste-item">
+                        <div class="paste-title"><%= paste.title || 'Untitled' %></div>
+                        <div class="paste-meta">
+                            <span class="badge"><%= paste.language %></span>
+                            <span class="views">👁️ <%= paste.views %></span>
+                            <span class="date"><%= new Date(paste.created_at).toLocaleString('vi-VN') %></span>
+                        </div>
+                    </a>
+                    <% }); %>
+                </div>
+            </div>
+            <% } %>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <h3>🔌 API Documentation</h3>
+                <div class="api-docs">
+                    <div class="api-section">
+                        <h4>Tạo Paste</h4>
+                        <code>POST /api/paste</code>
+                        <pre>{
+  "title": "Tên paste",
+  "content": "Nội dung code",
+  "language": "javascript",
+  "expiresIn": 3600
+}</pre>
+                    </div>
+                    
+                    <div class="api-section">
+                        <h4>Lấy Paste</h4>
+                        <code>GET /api/paste/:id</code>
+                        <code>GET /api/paste/:id/raw</code>
+                    </div>
+
+                    <div class="api-section">
+                        <h4>Paste gần đây</h4>
+                        <code>GET /api/recent?limit=10</code>
+                    </div>
+                </div>
+                
+                <p class="footer-note">
+                    💡 <strong>Hỗ trợ bot:</strong> Messenger, Discord, Telegram - 
+                    <a href="/docs" style="color: #64b5f6;">Xem hướng dẫn</a>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>

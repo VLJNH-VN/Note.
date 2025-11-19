@@ -1,0 +1,21 @@
+{
+  "name": "note-paste-bach-hoang",
+  "version": "1.0.0",
+  "description": "Note Paste Bạch Hoàng - API paste code cho bot Messenger, Discord",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["paste", "pastebin", "api", "bot", "messenger", "discord"],
+  "author": "Bạch Hoàng",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^22.13.11",
+    "better-sqlite3": "^12.4.1",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "highlight.js": "^11.11.1",
+    "nanoid": "^5.1.6"
+  }
+}

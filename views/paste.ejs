@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= paste.title %> - Note Paste Bạch Hoàng</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><a href="/" style="color: inherit; text-decoration: none;">📝 Note Paste Bạch Hoàng</a></h1>
+        </header>
+
+        <div class="paste-view">
+            <div class="paste-header">
+                <h2><%= paste.title %></h2>
+                <div class="paste-info">
+                    <span class="badge"><%= paste.language %></span>
+                    <span class="views">👁️ <%= paste.views %> lượt xem</span>
+                    <span class="date">📅 <%= new Date(paste.created_at).toLocaleString('vi-VN') %></span>
+                    <% if (paste.expires_at) { %>
+                    <span class="expires">⏰ Hết hạn: <%= new Date(paste.expires_at).toLocaleString('vi-VN') %></span>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="paste-actions">
+                <button onclick="copyCode()" class="btn-secondary">
+                    <span class="btn-icon">📋</span>
+                    Copy Code
+                </button>
+                <button onclick="copyUrl()" class="btn-secondary">
+                    <span class="btn-icon">🔗</span>
+                    Copy Link
+                </button>
+                <a href="/api/paste/<%= paste.id %>/raw" class="btn-secondary">
+                    <span class="btn-icon">📄</span>
+                    Raw
+                </a>
+            </div>
+
+            <div class="code-container">
+                <pre><code id="code-content" class="language-<%= paste.language %>" data-content="<%= paste.content %>"></code></pre>
+            </div>
+        </div>
+
+        <div class="back-home">
+            <a href="/" class="btn-primary">
+                <span class="btn-icon">🏠</span>
+                Tạo paste mới
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const codeElement = document.getElementById('code-content');
+        codeElement.textContent = codeElement.getAttribute('data-content');
+        hljs.highlightAll();
+
+        function copyCode() {
+            const code = document.getElementById('code-content').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('✅ Đã copy code!');
+            });
+        }
+
+        function copyUrl() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('✅ Đã copy link!');
+            });
+        }
+    </script>
+</body>
+</html>
