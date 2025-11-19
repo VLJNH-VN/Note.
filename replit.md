@@ -25,11 +25,13 @@ Website API chia sẻ code giống dpaste, cho phép:
 - `README.md` - Project documentation
 
 ## API Endpoints
-- POST /api/paste - Tạo paste mới
+- POST /api/paste - Tạo paste mới (mặc định private nếu không chỉ định isPrivate)
 - GET /api/paste/:id - Lấy thông tin paste (JSON)
 - GET /api/paste/:id/raw - Lấy nội dung raw text
-- GET /api/recent?limit=10 - Lấy danh sách paste gần đây
+- GET /api/recent?limit=10 - Lấy danh sách paste gần đây (chỉ public pastes)
 - GET /bachhoang/:id - Xem paste trên web UI
+
+**API Security Note:** Khi bot/API gọi mà không gửi `isPrivate` parameter, paste sẽ tự động là **private** để bảo vệ code và API keys.
 
 ## Deployment
 Chuẩn bị cho Railway:
@@ -52,3 +54,5 @@ Chuẩn bị cho Railway:
     - Sử dụng ID dài 21 ký tự (vs 10 ký tự cho public) để tăng bảo mật
     - Database schema updated với cột is_private
     - API endpoint hỗ trợ isPrivate parameter
+    - **API mặc định là private:** Khi bot gọi mà không gửi `isPrivate`, paste tự động là private để bảo vệ thông tin
+    - Updated documentation với ví dụ bot integration

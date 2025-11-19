@@ -65,12 +65,14 @@ app.post('/api/paste', (req, res) => {
       expirationMs = expiresInNum * 1000;
     }
 
+    const isPrivateValue = isPrivate !== undefined ? isPrivate : true;
+
     const paste = createPaste(
       title || 'Untitled',
       content,
       validatedLanguage,
       expirationMs,
-      isPrivate
+      isPrivateValue
     );
 
     const baseUrl = req.get('host');
@@ -82,7 +84,7 @@ app.post('/api/paste', (req, res) => {
       url: `${protocol}://${baseUrl}/bachhoang/${paste.id}`,
       raw_url: `${protocol}://${baseUrl}/api/paste/${paste.id}/raw`,
       api_url: `${protocol}://${baseUrl}/api/paste/${paste.id}`,
-      is_private: !!isPrivate
+      is_private: !!isPrivateValue
     });
   } catch (error) {
     console.error('Error creating paste:', error);

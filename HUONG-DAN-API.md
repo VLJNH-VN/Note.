@@ -12,7 +12,8 @@
   "title": "Tên paste của bạn",
   "content": "Code hoặc văn bản bạn muốn chia sẻ",
   "language": "javascript",
-  "expiresIn": 3600
+  "expiresIn": 3600,
+  "isPrivate": false
 }
 ```
 
@@ -22,17 +23,23 @@
 - `language` (optional): Ngôn ngữ lập trình (mặc định: "plaintext")
   - Các giá trị hỗ trợ: `javascript`, `python`, `java`, `cpp`, `csharp`, `php`, `ruby`, `go`, `rust`, `html`, `css`, `sql`, `json`, `xml`, `markdown`, `bash`, `typescript`, `plaintext`
 - `expiresIn` (optional): Thời gian hết hạn (giây). Bỏ trống để không giới hạn.
+- `isPrivate` (optional): `true` = paste riêng tư (không hiển thị ở trang chủ), `false` = công khai. **Mặc định: `true`** (bảo vệ thông tin khi bot upload)
+  - **Lưu ý:** Nếu không gửi parameter này, paste sẽ tự động là **private** để bảo vệ code/API keys của bạn
+  - Private paste sử dụng ID dài 21 ký tự (rất khó đoán) thay vì 10 ký tự
 
 **Response:**
 ```json
 {
   "success": true,
-  "id": "abc123xyz",
-  "url": "https://your-domain.com/bachhoang/abc123xyz",
-  "raw_url": "https://your-domain.com/api/paste/abc123xyz/raw",
-  "api_url": "https://your-domain.com/api/paste/abc123xyz"
+  "id": "abc123xyz_or_21chars",
+  "url": "https://your-domain.com/bachhoang/abc123xyz_or_21chars",
+  "raw_url": "https://your-domain.com/api/paste/abc123xyz_or_21chars/raw",
+  "api_url": "https://your-domain.com/api/paste/abc123xyz_or_21chars",
+  "is_private": true
 }
 ```
+
+**Note:** ID sẽ dài 21 ký tự nếu là private paste, 10 ký tự nếu là public paste.
 
 ### 2. Lấy Thông Tin Paste
 
@@ -110,13 +117,14 @@ async function uploadCodeToPaste(code, language = 'javascript', title = 'Code t�
       title: title,
       content: code,
       language: language,
-      expiresIn: null // Không hết hạn
+      expiresIn: null
     });
 
     if (response.data.success) {
       return {
         url: response.data.url,
-        rawUrl: response.data.raw_url
+        rawUrl: response.data.raw_url,
+        isPrivate: response.data.is_private
       };
     }
   } catch (error) {
@@ -191,7 +199,8 @@ def upload_code_to_paste(code, language='python', title='Code từ Messenger'):
         if data.get('success'):
             return {
                 'url': data['url'],
-                'raw_url': data['raw_url']
+                'raw_url': data['raw_url'],
+                'is_private': data['is_private']
             }
     except Exception as e:
         print(f'Lỗi khi upload paste: {e}')
