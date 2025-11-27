@@ -183,5 +183,5 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Note Paste Bạch Hoàng đang chạy tại http://0.0.0.0:${PORT}`);
+  console.log(`🚀 Note Paste đang chạy tại http://0.0.0.0:${PORT}`);
 });
